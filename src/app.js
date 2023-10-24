@@ -1,14 +1,20 @@
 "use strict";
 
+// Server default port is 3000 //
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+// Database
 const db = require('./config');
 
+// Router
 const indexRouter = require('./routes/indexRouter');
+const usersRouter = require('./routes/usersRouter');
+const eventsRouter = require('./routes/eventsRouter');
 
 const app = express(); 
 app.set('views', path.join(__dirname, 'views'));
@@ -20,7 +26,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
     
+// End points
+app.use('/', indexRouter); 
 app.use('/api/', indexRouter); 
+app.use('/api/users', usersRouter); 
+app.use('/api/events', eventsRouter); 
 
 app.use(function(req, res, next) {
   next(createError(404));

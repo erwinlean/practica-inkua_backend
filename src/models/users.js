@@ -2,8 +2,8 @@
 
 const mongoose = require('mongoose');
 const fs = require('fs');
-const { validationPassword, validationEmail } = require("../utils/validation")
 const path = require('path');
+const { validationPassword, validationEmail } = require("../utils/validation")
 
 // Default IMG for users
 const defaultImagePath = path.join(__dirname, '..', 'assets', 'users', 'default.png');

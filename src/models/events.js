@@ -1,6 +1,8 @@
 "use strict";
 
 const mongoose = require('mongoose');
+const fs = require('fs');
+const path = require('path');
 
 // Default IMG for users
 const defaultImagePath = path.join(__dirname, '..', 'assets', 'events', 'default.png');
@@ -30,10 +32,13 @@ const eventSchema = mongoose.Schema({
         ref: 'User'
     },
     usersJoined: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        }
-    ]
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
+    eventDate: {
+        type: Date,
+        required: true
+    }
 });
 
 module.exports = mongoose.model('events', eventSchema);
