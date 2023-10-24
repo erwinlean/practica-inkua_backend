@@ -1,15 +1,24 @@
 {
-  "name": "inkua",
-  "version": "1.0.0",
-  "description": "Inkua practice U.T.N.",
-  "main": "app.js",
+  "name": "eco-encuentro",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./src/bin/www"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "http-errors": "~1.6.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.1.0",
+    "mongoose": "^6.12.1",
+    "morgan": "~1.9.1",
+    "nodemon": "^2.0.22",
+    "semver": "^7.5.1",
+    "simple-update-notifier": "^2.0.0"
   }
 }
