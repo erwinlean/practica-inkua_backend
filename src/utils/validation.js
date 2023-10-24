@@ -1,3 +1,12 @@
+"use strict";
+
+/**
+ * 
+ * @param {String} password 
+ * @param {String} email
+ * @returns {String}
+ */
+
 function validationPassword(password) {
     if (!/^(?=.*[a-zA-Z])(?=.*\d).+$/.test(password)) {
         return next(new Error('El password debe contener al menos una letra y un número.'));
@@ -19,4 +28,4 @@ function validationEmail(email) {
 module.exports = {
     validationEmail,
     validationPassword
-}
+};
