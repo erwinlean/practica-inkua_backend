@@ -4,19 +4,21 @@ const jwt = require("jsonwebtoken");
 const jwtSecret = "inkua";
 
 const jsonWebTokenVerify = (req, res, next) => {
-    const token = req.body["token-Ok"];
+    const authHeader = req.header("Authorization");
 
-    if (!token) {
-        return res.status(401).json("Error: Token necesario")
-    }
+    if (!authHeader) {
+        return res.status(401).json("Error: Token necesario");
+    };
 
-    jwt.verify(token, keyjsonWT, (err, decoded) => {
+    const token = authHeader.split(" ")[1];
+
+    jwt.verify(token, jwtSecret, (err, decoded) => {
         if (err) {
             return res.status(401).json(`Error en la verificación del token: ${err}`);
         } else {
             console.log(`Token verificado: ${decoded}`);
             next();
-        }
+        };
     });
 };
 

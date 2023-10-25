@@ -1,6 +1,8 @@
 "use strict";
 
 const Event = require('../models/events');
+const User = require("../models/users");
+const { geoLocalization } = require("../utils/geoLocalization");
 
 module.exports = {
 
@@ -26,12 +28,22 @@ module.exports = {
                 location,
                 eventImg,
                 createdBy,
-                eventDate,
+                eventDate
             });
 
             await newEvent.save();
 
-            return res.status(201).json({ message: 'Evento creado exitosamente', evento: newEvent });
+            const map = await geoLocalization(location);
+
+            const eventOwned = await User.findOne({ _id: createdBy });
+            const eventData = { title, location, eventImg, eventDate, eventOwned };
+
+            return res.status(201).json({
+                message: `Evento ${title} creado exitosamente.`,
+                mapLink: map,
+                evento: eventData
+            });
+
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Error interno del servidor.' });
