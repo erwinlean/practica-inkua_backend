@@ -3,6 +3,7 @@
 const Event = require('../models/events');
 const User = require("../models/users");
 const { geoLocalization } = require("../utils/geoLocalization");
+const { passwordFilter } = require("../utils/helpers");
 
 module.exports = {
 
@@ -23,20 +24,27 @@ module.exports = {
         try {
             const { title, location, eventImg, createdBy, eventDate } = req.body;
 
+            const eventOwner = await User.findOne({ _id: createdBy });
+
+            if(!eventOwner){
+                return res.status(404).json({message : "Usuario no encontrado."});
+            };
+
+            const map = await geoLocalization(location);
+
+            const eventOwnedWithoutPassword = passwordFilter(eventOwner);console.log(eventOwnedWithoutPassword)
+            const eventData = { title, location, eventImg, eventDate, eventOwnedWithoutPassword };
+
             const newEvent = new Event({
                 title,
                 location,
                 eventImg,
-                createdBy,
-                eventDate
+                eventOwnedWithoutPassword,
+                eventDate,
+                map
             });
 
             await newEvent.save();
-
-            const map = await geoLocalization(location);
-
-            const eventOwned = await User.findOne({ _id: createdBy });
-            const eventData = { title, location, eventImg, eventDate, eventOwned };
 
             return res.status(201).json({
                 message: `Evento ${title} creado exitosamente.`,
@@ -84,6 +92,17 @@ module.exports = {
             console.error(error);
             return res.status(500).json({ message: 'Error interno del servidor.' });
         };
-    }
+    },
     
+    deleteAllEvents: async function (req, res, next) {
+        try {
+            const deletedEvent = await Event.deleteMany({});
+
+            return res.status(200).json({ message: `Eventos eliminados.` });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Error interno del servidor.' });
+        };
+    }
+        
 };

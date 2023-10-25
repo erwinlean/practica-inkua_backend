@@ -9,7 +9,7 @@ const { jsonWebTokenVerify } = require("../middleware/authMiddleware")
 /***** "/users" defined at app.js *****/
 
 // Get users.
-router.get('/', getUsers);
+router.get('/', jsonWebTokenVerify, getUsers);
 router.all('/', badMethod)
 
 // Create users.
@@ -20,7 +20,7 @@ router.post('/login', userLogin);
 // Delete user by email and token required.
 router.delete('/delete/:email', jsonWebTokenVerify,  deleteUser);
 // Clear users, just for dev mode.
-router.delete('/delete', deleteAllUsers);
+router.delete('/delete', jsonWebTokenVerify, deleteAllUsers);
 router.all('/delete', badMethod)
 
 module.exports = router;

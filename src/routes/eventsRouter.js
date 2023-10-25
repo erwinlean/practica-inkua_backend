@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { getEvents, createEvents, usersJoiningEvent, deleteEvent} = require('../controllers/eventsController');
+const { getEvents, createEvents, usersJoiningEvent, deleteEvent, deleteAllEvents} = require('../controllers/eventsController');
 const { badMethod } = require("../utils/errorHandler");
 const { jsonWebTokenVerify } = require("../middleware/authMiddleware")
 
@@ -19,5 +19,6 @@ router.put("/usersevent", jsonWebTokenVerify, usersJoiningEvent);
 
 // Delete specific event based on email (must be the same as the creator)
 router.delete("/delete", jsonWebTokenVerify, deleteEvent);
+router.delete("/delete/all", jsonWebTokenVerify, deleteAllEvents);
 
 module.exports = router;

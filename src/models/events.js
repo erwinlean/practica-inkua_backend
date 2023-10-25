@@ -38,6 +38,10 @@ const eventSchema = mongoose.Schema({
     eventDate: {
         type: Date,
         required: true
+    },
+    map: {
+        type: String,
+        defaut: null
     }
 });
 
