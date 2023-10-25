@@ -3,7 +3,6 @@
 const Event = require('../models/events');
 const User = require("../models/users");
 const { geoLocalization } = require("../utils/geoLocalization");
-const { passwordFilter } = require("../utils/helpers");
 
 module.exports = {
 
@@ -18,7 +17,7 @@ module.exports = {
             console.error(error);
             return res.status(500).json({ message: 'Error interno del servidor.' });
         };
-    },
+    },    
 
     createEvents: async function (req, res, next) {
         try {
@@ -30,18 +29,23 @@ module.exports = {
                 return res.status(404).json({message : "Usuario no encontrado."});
             };
 
-            const map = await geoLocalization(location);
+            const eventData = { 
+                title,
+                location,
+                createdBy,
+                eventDate,                
+                eventImg,
+            };
 
-            const eventOwnedWithoutPassword = passwordFilter(eventOwner);console.log(eventOwnedWithoutPassword)
-            const eventData = { title, location, eventImg, eventDate, eventOwnedWithoutPassword };
+            const map = await geoLocalization(location);
 
             const newEvent = new Event({
                 title,
                 location,
-                eventImg,
-                eventOwnedWithoutPassword,
+                createdBy,
                 eventDate,
-                map
+                map,
+                eventImg
             });
 
             await newEvent.save();

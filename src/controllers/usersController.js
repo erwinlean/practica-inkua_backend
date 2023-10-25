@@ -73,7 +73,8 @@ module.exports = {
                 return res.status(404).json({ message: 'No se encontró un usuario con ese correo electrónico.' });
             };
 
-            const passwordMatch = bcrypt.compareSync(password, user.password);
+            // MODIFICAR EL COMPARE, NO FUNCIONANDO...
+            const passwordMatch = bcrypt.compare(password, user.password);
 
             if (!passwordMatch) {
                 return res.status(401).json({ message: 'Contraseña incorrecta.' });
