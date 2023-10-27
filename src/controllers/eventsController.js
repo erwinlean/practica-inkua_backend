@@ -69,12 +69,18 @@ module.exports = {
             const event = await Event.findById(eventId);
             if (!event) {
                 return res.status(404).json({ message: 'Evento no encontrado.' });
-            }
+            };
+
+            for(const users of event.usersJoined){
+                if(users == userId){
+                    return res.status(400).json({ message: "El usuario ya se encuentra subscripto al evento."})
+                };
+            };
 
             event.usersJoined.push(userId);
             await event.save();
 
-            return res.status(204).json({ message: `El usuario ${userId} se unió al evento.` });
+            return res.status(200).json({ message: `El usuario ${userId} se unió al evento.` });
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Error interno del servidor.' });

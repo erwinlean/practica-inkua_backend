@@ -3,7 +3,6 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
-const { validationPassword, validationEmail } = require("../utils/validation")
 
 // Default IMG for users
 const defaultImagePath = path.join(__dirname, '..', 'assets', 'users', 'default.png');
@@ -34,14 +33,6 @@ const users = mongoose.Schema({
         type: String,
         default: defaultImageURI,
     }
-});
-
-// Hash and password validation+email
-users.pre('save', function (next) {
-    validationPassword(this.password);
-    validationEmail(users.email);
-
-    next();
 });
 
 module.exports = mongoose.model('users', users);

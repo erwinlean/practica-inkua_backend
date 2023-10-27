@@ -3,6 +3,7 @@
 const users = require('../models/users');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { validationPassword, validationEmail } = require("../utils/validation")
 const config = require('../middleware/authMiddleware');
 
 module.exports = {
@@ -26,8 +27,6 @@ module.exports = {
         try {
             const { name, email, password } = req.body;
 
-            console.log(req.body)
-
             if (!name || !email || !password) {
                 return res.status(400).json({ message: 'Faltan propiedades requeridas del usuario.' });
             };
@@ -37,10 +36,21 @@ module.exports = {
                 return res.status(409).json({ message: 'El correo electrónico ya está en uso.' });
             };
 
+            // Validation and hash password
+            const hashedPassword = validationPassword(password);
+            if (hashedPassword instanceof Error) {
+                return res.status(400).json({ message: hashedPassword.message });
+            };
+
+            validationEmail(email);
+            if(!email){
+                return res.status(400).json({message: "El email proporcionado es incorrecto."});
+            };
+
             const newUser = new users({
                 name,
                 email,
-                password,
+                password: hashedPassword,
             });
 
             await newUser.save();
@@ -73,11 +83,11 @@ module.exports = {
                 return res.status(404).json({ message: 'No se encontró un usuario con ese correo electrónico.' });
             };
 
-            // MODIFICAR EL COMPARE, NO FUNCIONANDO...
-            const passwordMatch = bcrypt.compare(password, user.password);
+            // MODIFICAR EL COMPARE, NO FUNCIONANDO... 
+            const passwordMatch = bcrypt.compareSync(password, user.password);
 
             if (!passwordMatch) {
-                return res.status(401).json({ message: 'Contraseña incorrecta.' });
+                return res.status(401).json({ message: `Contraseña incorrecta.` });
             };
 
             const token = jwt.sign(

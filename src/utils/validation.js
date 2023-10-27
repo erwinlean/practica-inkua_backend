@@ -20,12 +20,15 @@ function validationPassword(password) {
 };
 
 function validationEmail(email) {
-    let emailCheck = email;
     if (email) {
-        emailCheck.includes('@' && '.' && String);
+        if (email.includes('@') && email.includes('.')) {
+            return true;
+        } else {
+            return false;
+        };
     } else {
-        return new Error('El mail no contiene @ y/o . necesarios.');
-    };  
+        return false;
+    };
 };
 
 module.exports = {
