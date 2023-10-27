@@ -2,6 +2,7 @@
 Base URL
 https://NO-URL-YET.com/api
 
+Notes: For this app to work, need to create .env and add the mongoDB url, and google maps api key.
 
 #### Endpoints for users:
 ##### https://NO-URL-YET.com/api/users
