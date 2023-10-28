@@ -18,7 +18,7 @@ router.post("/create", jsonWebTokenVerify, createEvents);
 router.put("/usersevent", jsonWebTokenVerify, usersJoiningEvent);
 
 // Delete specific event based on email (must be the same as the creator)
-router.delete("/delete", jsonWebTokenVerify, deleteEvent);
+router.delete("/delete/:eventId", jsonWebTokenVerify, deleteEvent);
 router.delete("/delete/all", jsonWebTokenVerify, deleteAllEvents);
 
 module.exports = router;

@@ -16,7 +16,6 @@ const jsonWebTokenVerify = (req, res, next) => {
         if (err) {
             return res.status(401).json(`Error en la verificación del token: ${err}`);
         } else {
-            console.log(`Token verificado: ${decoded}`);
             next();
         };
     });

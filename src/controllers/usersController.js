@@ -83,7 +83,6 @@ module.exports = {
                 return res.status(404).json({ message: 'No se encontró un usuario con ese correo electrónico.' });
             };
 
-            // MODIFICAR EL COMPARE, NO FUNCIONANDO... 
             const passwordMatch = bcrypt.compareSync(password, user.password);
 
             if (!passwordMatch) {

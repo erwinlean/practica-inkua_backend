@@ -32,7 +32,13 @@ const users = mongoose.Schema({
     userImg: {
         type: String,
         default: defaultImageURI,
-    }
+    },
+    // TO ADD RELATION BETWEN THE USER AND THE EVENTS THEY ARE IN OR CREATED.
+    //events: [{
+    //    type: mongoose.Schema.Types.ObjectId,
+    //    ref: 'events',
+    //    default: null
+    //}]
 });
 
 module.exports = mongoose.model('users', users);

@@ -89,13 +89,20 @@ module.exports = {
 
     deleteEvent: async function (req, res, next) {
         try {
+            const { userDeleting } = req.body;
             const { eventId } = req.params;
+
+            const event =  await Event.findOne({eventId});
+  
+            if(userDeleting !== event.createdBy.valueOf()){
+                return res.status(403).json({ message: 'No autorizado, solo el creado del evento puede eliminarlo.' });
+            };
 
             const deletedEvent = await Event.findByIdAndDelete(eventId);
 
             if (!deletedEvent) {
                 return res.status(404).json({ message: 'Evento no encontrado.' });
-            }
+            };
 
             return res.status(200).json({ message: `El evento ${deletedEvent.title} fue eliminado.` });
         } catch (error) {
