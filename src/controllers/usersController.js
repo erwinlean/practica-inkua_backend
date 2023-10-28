@@ -109,39 +109,33 @@ module.exports = {
 
     deleteUser: async function (req, res, next) {
         try {
-            const token = req.header('Authorization.');
-
-            if (!token) {
-                return res.status(401).json({ message: 'Token de autenticación faltante.' });
+            const { userLogged } = req.body;
+            const { emailToDelete } = req.params;
+            console.log(userLogged, emailToDelete);
+    
+            const user = await users.findOne({ email: emailToDelete });
+    
+            if (!user) {
+                return res.status(404).json({ message: `Usuario ${emailToDelete} no encontrado.` });
             };
-
-            jwt.verify(token, config.jwtSecret, (err, decoded) => {
-                if (err) {
-                    return res.status(401).json({ message: 'Token inválido o expirado.' });
-                } else {
-                    const emailToDelete = req.params.email;
-
-                    if (!emailToDelete) {
-                        return res.status(400).json({ message: 'Se requiere el parámetro de correo electrónico.' });
-                    };
-
-                    users.findOneAndDelete({ email: emailToDelete }, (err, user) => {
-                        if (err) {
-                            console.error(err);
-                            return res.status(500).json({ message: 'Error interno del servidor.' });
-                        };
-                        if (!user) {
-                            return res.status(404).json({ message: `Usuario ${emailToDelete} no encontrado.` });
-                        };
-                        return res.json({ message: `Usuario ${emailToDelete} eliminado exitosamente.` });
-                    });
-                };
-            });
+    
+            if (user._id.toString() !== userLogged) {
+                return res.status(401).json({ message: 'Solo puedes eliminar tu propio perfil.' });
+            };
+    
+            const deletedUser = await users.findOneAndDelete({ email: emailToDelete });
+    
+            if (!deletedUser) {
+                return res.status(404).json({ message: `Usuario ${emailToDelete} no encontrado.` });
+            };
+    
+            return res.json({ message: `Usuario ${emailToDelete} eliminado exitosamente.` });
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Error interno del servidor.' });
         };
     },
+    
 
     deleteAllUsers: async function (req, res, next) {
         try {
