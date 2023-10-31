@@ -22,6 +22,7 @@ function htmlMail(resetLink, userName) {
             <p style="font-size: 18px; margin-bottom: 20px;">Has solicitado restablecer tu contraseña.</p>
             <br> 
             Haz clic en el siguiente enlace para restablecerla:</p>
+            <br>
             <p><a href="${resetLink}" style="background-color: #61AE4E; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px; font-weight: bold;">Restablecer Contraseña</a></p>
             <br>
             <p>Si no has solicitado esto, por favor ignora este correo electrónico.</p>
