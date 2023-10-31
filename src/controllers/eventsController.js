@@ -39,6 +39,9 @@ module.exports = {
 
             const map = await geoLocalization(location);
 
+            eventOwner.events.push(newEvent._id);
+            await eventOwner.save();
+
             const newEvent = new Event({
                 title,
                 location,
@@ -67,6 +70,8 @@ module.exports = {
             const { eventId, userId } = req.body;
 
             const event = await Event.findById(eventId);
+            const user = await User.findById(userId);
+
             if (!event) {
                 return res.status(404).json({ message: 'Evento no encontrado.' });
             };
@@ -79,6 +84,9 @@ module.exports = {
 
             event.usersJoined.push(userId);
             await event.save();
+
+            user.events.push(eventId);
+            await user.save();
 
             return res.status(200).json({ message: `El usuario ${userId} se unió al evento.` });
         } catch (error) {
@@ -105,6 +113,36 @@ module.exports = {
             };
 
             return res.status(200).json({ message: `El evento ${deletedEvent.title} fue eliminado.` });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Error interno del servidor.' });
+        };
+    },
+
+    userQuitEvent: async function (req, res, next) {
+        try {
+            const { eventId, userId } = req.body;
+            
+            const event = await Event.findById(eventId);
+            const user = await User.findById(userId);
+    
+            if (!event) {
+                return res.status(404).json({ message: 'Evento no encontrado.' });
+            };
+    
+            if (!user) {
+                return res.status(404).json({ message: 'Usuario no encontrado.' });
+            };
+    
+            if (!user.events.includes(eventId)) {
+                return res.status(400).json({ message: "El usuario no está suscrito a este evento." });
+            };
+    
+            user.events = user.events.filter(eventId => eventId.toString() !== eventId);
+    
+            await user.save();
+    
+            return res.status(200).json({ message: `El usuario ${userId} abandonó el evento.` });
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Error interno del servidor.' });
