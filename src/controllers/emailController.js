@@ -9,6 +9,8 @@
     El front envia una peticion al backend email, password, y en el header el token, si todo es correcto, actualiza la contraseña del usuario en la DB.
 */
 
+const jwt = require('jsonwebtoken');
+const config = require('../middleware/authMiddleware');
 const users = require("../models/users");
 // Email send function
 const { sendResetEmail } = require("../utils/emailSender");
@@ -51,8 +53,7 @@ module.exports = {
     } catch (error) {
         console.log(error);
         return res.status(500).json({message:  "Internal server error."});
-    };
-    },
+    };},
 
     /* Redirect user endpoint to Frontend */
     redirect: async function (req, res, next) {
