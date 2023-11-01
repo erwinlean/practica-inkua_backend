@@ -20,7 +20,7 @@ router.post('/login', userLogin);
 // Delete user by email and token required.
 router.delete('/delete/:emailToDelete', jsonWebTokenVerify,  deleteUser);
 // Clear users, just for dev mode.
-router.delete('/delete/all', jsonWebTokenVerify, deleteAllUsers);
+router.delete('/delete/all', deleteAllUsers);
 router.all('/delete', badMethod)
 
 module.exports = router;
