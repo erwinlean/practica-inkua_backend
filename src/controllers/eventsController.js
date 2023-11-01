@@ -21,9 +21,13 @@ module.exports = {
 
     createEvents: async function (req, res, next) {
         try {
-            const { title, location, eventImg, createdBy, eventDate } = req.body;
+            const { title, location, eventImg, createdBy, eventDate, description, category } = req.body;
 
             const eventOwner = await User.findOne({ _id: createdBy });
+
+            if (!title || !location || !createdBy || !eventDate || !description || !category) {
+                return res.status(400).json({ message: 'Faltan campos requeridos en la solicitud.' });
+            };
 
             if(!eventOwner){
                 return res.status(404).json({message : "Usuario no encontrado."});
@@ -35,12 +39,16 @@ module.exports = {
                 createdBy,
                 eventDate,                
                 eventImg,
+                description,
+                category
+            };
+
+            const validCategories = ["Árboles", "Hogar", "Industria", "Animales", "Contaminación", "Basurales", "Energía", "Fauna marina"];
+            if (!validCategories.includes(category)) {
+                return res.status(400).json({ message: 'Categoría no válida.' });
             };
 
             const map = await geoLocalization(location);
-
-            eventOwner.events.push(newEvent._id);
-            await eventOwner.save();
 
             const newEvent = new Event({
                 title,
@@ -48,10 +56,15 @@ module.exports = {
                 createdBy,
                 eventDate,
                 map,
-                eventImg
+                eventImg,
+                description,
+                category
             });
 
             await newEvent.save();
+
+            eventOwner.events.push(newEvent._id);
+            await eventOwner.save();
 
             return res.status(201).json({
                 message: `Evento ${title} creado exitosamente.`,

@@ -42,7 +42,16 @@ const eventSchema = mongoose.Schema({
     map: {
         type: String,
         defaut: null
+    },
+    description:{
+        type: String,
+        min: 50,
+        required: true
+    },
+    category:{
+        type: String,
+        enum: ["Árboles", "Hogar", "Industria", "Animales", "Contaminación", "Basurales", "Energía", "Fauna marina"]
     }
 });
 
-module.exports = mongoose.model('events', eventSchema);
+module.exports = mongoose.model("events", eventSchema);
