@@ -8,6 +8,6 @@ function corsConfig(req, res, next) {
     };
     
     cors(corsOptions)(req, res, next);
-}
+};
 
 module.exports = corsConfig;

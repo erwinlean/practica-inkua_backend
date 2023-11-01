@@ -38,12 +38,8 @@ app.use("/api/email", emailRouter);
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 // Cors
-const cors = require("./middlewares/cors");
+const cors = require("./middleware/corsMiddleware");
 app.use(cors);
-
-// Security by ip
-const ipCheck = require("./middleware/securityMiddleware");
-//app.use(ipCheck);
 
 app.use(function(req, res, next) {
   next(createError(404));

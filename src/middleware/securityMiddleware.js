@@ -2,7 +2,7 @@
 
 function ipCheck(req, res, next) {
     const allowedIP = "::1"; // localhost, to modify witch a list if needed
-    
+    //const allowedIP = "1.1"; test for specific IP, worked.
     const requestIP = req.ip;
 
     console.dir(requestIP);
@@ -14,4 +14,4 @@ function ipCheck(req, res, next) {
     next();
 };
 
-module.exports = ipCheck;
+module.exports = { ipCheck };
