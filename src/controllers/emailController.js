@@ -89,6 +89,7 @@ module.exports = {
           // Hash the new password, and save the user
           const hashedPassword = validationPassword(newPassword);
           user.password = hashedPassword;
+          
           await user.save();
 
           return res.json({ message: "Password reset successful" });
