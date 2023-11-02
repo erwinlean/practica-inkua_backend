@@ -6,6 +6,10 @@ const jwt = require('jsonwebtoken');
 const { validationPassword, validationEmail } = require("../utils/validation")
 const config = require('../middleware/authMiddleware');
 
+// Img
+const fs = require('fs');
+const path = require('path');
+
 module.exports = {
 
     getUsers: async function (req, res, next) {
@@ -23,7 +27,7 @@ module.exports = {
         };
     },
 
-    createUser: async function (req, res, next) {
+    createUsers: async function (req, res, next) {
         try {
             const { name, email, password } = req.body;
 
@@ -73,7 +77,7 @@ module.exports = {
         };
     },
 
-    userLogin: async function (req, res, next) {
+    loginUsers: async function (req, res, next) {
         try {
             const { email, password } = req.body;
 
@@ -101,6 +105,53 @@ module.exports = {
             );
 
             return res.json({ message: 'Inicio de sesión exitoso.', token });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Error interno del servidor.' });
+        };
+    },
+
+    userUpdate: async function (req, res, next) {
+        try {
+            const { email, name, password, userImg } = req.body;
+            const user = await users.findOne({ email });
+
+            if (!user) {
+                return res.status(404).json({ message: "Usuario no encontrado." });
+            };
+
+            if (name !== undefined) {
+                user.name = name;
+            };
+
+            if (password !== undefined) {
+                user.password = password;
+            };
+
+            if (email !== undefined) {
+                user.email = email;
+            };
+
+            if (userImg) {
+                let userImgData;
+                let userImgFileName;
+    
+                if (userImg.startsWith('data:image/')) {
+                    userImgData = userImg;
+                    userImgFileName = `${user._id}.png`;
+                } else {
+                    userImgData = Buffer.from(userImg).toString('base64');
+                    userImgFileName = `${user._id}.png`;
+                };
+    
+                const newUserImgPath = path.join(__dirname, '..', 'assets', 'users', userImgFileName);
+                fs.writeFileSync(newUserImgPath, userImgData);
+                user.userImg = userImgFileName;
+            };
+
+            await user.save();
+
+            return res.status(200).json({ message: `Los datos del usuario ${user.name} fueron actualizados.` });
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Error interno del servidor.' });

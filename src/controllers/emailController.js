@@ -68,7 +68,7 @@ module.exports = {
         const redirectURL = `https://URL-TO.REDIRECT/password-reset.html?token=${token}&email=${email}`; // URL del front.
         // URL OF FROTNEND, WE SENDING THE TOKEN AND EMAIL, THE FRONTEND SHOULD SEND THIS FOR THE RECOVER OF PASSWROD
 
-        return res.redirect(redirectURL);
+        return res.status(302).redirect(redirectURL);
     },
 
     /* request the new password and email (the token is verified at the router) and update the user */
@@ -92,7 +92,7 @@ module.exports = {
           
           await user.save();
 
-          return res.json({ message: "Password reset successful" });
+          return res.status(200).json({ message: "Password reset successful" });
         } catch (error) {
           console.error(error);
           return res.status(500).json({message:  "Internal server error."});

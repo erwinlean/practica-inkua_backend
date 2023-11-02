@@ -108,30 +108,6 @@ module.exports = {
         };
     },
 
-    deleteEvent: async function (req, res, next) {
-        try {
-            const { userDeleting } = req.body;
-            const { eventId } = req.params;
-
-            const event =  await Event.findOne({eventId});
-  
-            if(userDeleting !== event.createdBy.valueOf()){
-                return res.status(403).json({ message: 'No autorizado, solo el creado del evento puede eliminarlo.' });
-            };
-
-            const deletedEvent = await Event.findByIdAndDelete(eventId);
-
-            if (!deletedEvent) {
-                return res.status(404).json({ message: 'Evento no encontrado.' });
-            };
-
-            return res.status(200).json({ message: `El evento ${deletedEvent.title} fue eliminado.` });
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: 'Error interno del servidor.' });
-        };
-    },
-
     userQuitEvent: async function (req, res, next) {
         try {
             const { eventId, userId } = req.body;
@@ -147,15 +123,81 @@ module.exports = {
                 return res.status(404).json({ message: 'Usuario no encontrado.' });
             };
     
-            if (!user.events.includes(eventId)) {
+            if (!user.events.includes(eventId) || !event.usersJoined.includes(userId)) {
                 return res.status(400).json({ message: "El usuario no está suscrito a este evento." });
             };
     
             user.events = user.events.filter(eventId => eventId.toString() !== eventId);
+            event.usersJoined = event.usersJoined.filter(userId => userId.toString() !== userId);
     
             await user.save();
+            await event.save();
     
             return res.status(200).json({ message: `El usuario ${userId} abandonó el evento.` });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Error interno del servidor.' });
+        };
+    },
+
+    updateEvent: async function (req, res, next){
+        try{
+            const { userId, eventId, title, location, eventImg, createdBy, eventDate, description, category } = req.body;
+
+            if(userId !== createdBy){
+                return res.status(401).json({ message: "Solo el creador del evento puede modificarlo."})
+            };
+
+            const event = Event.findById(eventId);
+
+            if(!event){
+                return res.status(404).json({ message: "Evento no encontrado, por favor verifica la existencia del mismo."})
+            };
+
+            if (eventImg) {
+                let eventImgData;
+                let eventImgFileName;
+                if (eventImg.startsWith('data:image/')) {
+                    eventImgData = eventImg;
+                    eventImgFileName = `${event._id}.png`;
+                } else {
+                    eventImgData = Buffer.from(eventImg).toString('base64');
+                    eventImgFileName = `${event._id}.png`;
+                };
+                const neweventImgPath = path.join(__dirname, '..', 'assets', 'events', eventImgFileName);
+                fs.writeFileSync(neweventImgPath, eventImgData);
+                event.eventImg = eventImgFileName;
+            };
+
+            const toUpdate = { title, location, createdBy, eventDate, description, category };
+
+            for (const field in toUpdate) {
+                if (toUpdate[field] !== undefined) {
+                    event[field] = toUpdate[field];
+                };
+            };
+
+            await event.save();
+
+            return res.status(200).json({ message: `El evento ${title}, ${eventId} fue actualizado.`})
+        } catch(error){
+            return res.status(500).json({ message: 'Error interno del servidor.' });
+        };
+    },
+
+    deleteEvent: async function (req, res, next) {
+        try {
+            const { userDeleting } = req.body;
+            const { eventId } = req.params;
+            const event =  await Event.findOne({eventId});
+            if(userDeleting !== event.createdBy.valueOf()){
+                return res.status(403).json({ message: 'No autorizado, solo el creado del evento puede eliminarlo.' });
+            };
+            const deletedEvent = await Event.findByIdAndDelete(eventId);
+            if (!deletedEvent) {
+                return res.status(404).json({ message: 'Evento no encontrado.' });
+            };
+            return res.status(200).json({ message: `El evento ${deletedEvent.title} fue eliminado.` });
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Error interno del servidor.' });
