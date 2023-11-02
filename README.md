@@ -95,6 +95,17 @@ Description: Get a list of all events.
 Authentication: None.
 Response success:
 ```
+title (string, required): The title of the event.
+location (string, required): The location of the event.
+eventImg (string): URL of the event image.
+createdBy (string, required): The ID of the user creating the event.
+eventDate (date): The date of the event.
+category: (string), and enum based on figma (CHECK)
+description: (string), min 50 letters.
+usersJoined: (array) of usersId.
+```
+If there are not events:
+```
 message: 'Eventos no encontrados.'
 ```
 Errors:
@@ -115,6 +126,8 @@ location (string, required): The location of the event.
 eventImg (string): URL of the event image.
 createdBy (string, required): The ID of the user creating the event.
 eventDate (date): The date of the event.
+category: (string), and enum based on figma (CHECK)
+description: (string), min 50 letters.
 ```
 Response:
 ```
