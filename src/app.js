@@ -7,6 +7,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const { logGenerator } = require('./logs/logs');
 
 // Database
 const db = require("./config");
@@ -26,6 +27,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+// Cors
+const cors = require("./middleware/corsMiddleware");
+app.use(cors);
+
+// Logs
+app.use(logGenerator);
     
 // End points
 app.use("/", indexRouter); 
@@ -36,10 +44,6 @@ app.use("/api/email", emailRouter);
 
 // Static files, just in case
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
-
-// Cors
-const cors = require("./middleware/corsMiddleware");
-app.use(cors);
 
 app.use(function(req, res, next) {
   next(createError(404));
