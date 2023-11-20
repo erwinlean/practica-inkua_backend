@@ -2,13 +2,14 @@
 
 const Event = require('../models/events');
 const User = require("../models/users");
+const Messages = require("../models/messages");
 const { geoLocalization } = require("../utils/geoLocalization");
 
 module.exports = {
 
     getEvents: async function (req, res, next) {
         try {
-            const allEvents = await Event.find().populate('createdBy').populate('usersJoined');
+            const allEvents = await Event.find().populate('createdBy').populate('usersJoined').populate('messages');
 
             if (!allEvents || allEvents.length === 0) {
                 return res.status(404).json({ message: 'Eventos no encontrados.' });
@@ -18,7 +19,7 @@ module.exports = {
             console.error(error);
             return res.status(500).json({ message: 'Error interno del servidor.' });
         };
-    },    
+    },
 
     getEvent: async function (req, res, next) {
         try {

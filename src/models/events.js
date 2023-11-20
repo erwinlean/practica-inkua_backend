@@ -29,11 +29,11 @@ const eventSchema = mongoose.Schema({
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'users'
     },
     usersJoined: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'users'
     }],
     eventDate: {
         type: Date,
