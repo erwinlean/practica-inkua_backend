@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { getEvents, createEvents, usersJoiningEvent, userQuitEvent,updateEvent , deleteEvent, deleteAllEvents} = require('../controllers/eventsController');
+const { getEvents, getEvent, createEvents, usersJoiningEvent, userQuitEvent,updateEvent , deleteEvent, deleteAllEvents} = require('../controllers/eventsController');
 const { badMethod } = require("../utils/errorHandler");
 const { jsonWebTokenVerify } = require("../middleware/authMiddleware")
 
@@ -10,6 +10,7 @@ const { jsonWebTokenVerify } = require("../middleware/authMiddleware")
 
 // Get the events
 router.get('/', getEvents);
+router.get("/:eventId", getEvent);
 router.all('/', badMethod)
 
 // Create the event

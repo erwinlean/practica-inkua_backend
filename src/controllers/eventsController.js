@@ -19,6 +19,23 @@ module.exports = {
         };
     },    
 
+    getEvent: async function (req, res, next) {
+        try {
+            const event = req.params.eventId;
+
+            const getEvent = await Event.findById(event);
+
+            if (!getEvent || getEvent.length === 0) {
+                return res.status(404).json({ message: 'Eventos no encontrados.' });
+            };
+
+            return res.json({ eventos: getEvent });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Error interno del servidor.' });
+        };
+    },    
+
     createEvents: async function (req, res, next) {
         try {
             const { title, location, eventImg, createdBy, eventDate, description, category } = req.body;
