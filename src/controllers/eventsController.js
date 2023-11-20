@@ -8,7 +8,8 @@ module.exports = {
 
     getEvents: async function (req, res, next) {
         try {
-            const allEvents = await Event.find();
+            const allEvents = await Event.find().populate('createdBy').populate('usersJoined');
+
             if (!allEvents || allEvents.length === 0) {
                 return res.status(404).json({ message: 'Eventos no encontrados.' });
             };
@@ -23,7 +24,8 @@ module.exports = {
         try {
             const event = req.params.eventId;
 
-            const getEvent = await Event.findById(event);
+            const getEvent = await Event.findById(event).populate('createdBy').populate('usersJoined');
+
 
             if (!getEvent || getEvent.length === 0) {
                 return res.status(404).json({ message: 'Eventos no encontrados.' });
