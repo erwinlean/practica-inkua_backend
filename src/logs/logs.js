@@ -10,6 +10,10 @@ async function logGenerator(req, res, next) {
     const requestStart = Date.now();
     let logged = false;
 
+    /*if (req.method === 'OPTIONS') {
+        return next();
+    };*/
+
     res.on('close', async () => {
         if (logged) return; 
 
