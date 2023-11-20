@@ -10,19 +10,15 @@ async function logGenerator(req, res, next) {
     const requestStart = Date.now();
     let logged = false;
 
-    if (req.method === 'OPTIONS') {
-        return next();
-    };
-
     res.on('close', async () => {
         if (logged) return; 
 
         const logEntry = {
             ip: req.ip || req.connection.remoteAddress,
-            endpoint: req.path,
-            url: `${req.rawHeaders[9]}${req.path}`,
+            endpoint: req.originalUrl,
+            url: `${req.rawHeaders[9]}${req.originalUrl}`,
             method: req.method,
-            // header: req.rawHeaders,
+            //header: req.rawHeaders,
             timestamp: new Date(),
             processingTime: `${Date.now() - requestStart} ms`,
             resStatus: res.statusCode
@@ -35,7 +31,7 @@ async function logGenerator(req, res, next) {
 
             return logEntry;
         } catch (err) {
-            console.error('Error writing to request log or uploading to Google Drive:', err);
+            console.error('Error writing to request log or uploading to Google Drive:', err)
             return err.message
         };
     });
@@ -54,7 +50,7 @@ async function uploadLogEntryToDrive(logEntry) {
             fields: 'files(id)',
         });
 
-        let fileId = "1_fzcSGNneWgolOqp0ryOa6ytgFkv4S2U";
+        let fileId = null;
 
         if (existingFile.data.files.length > 0) {
             fileId = existingFile.data.files[0].id;
@@ -75,7 +71,7 @@ async function uploadLogEntryToDrive(logEntry) {
                 },
             });
 
-            console.log('Log entry updated on Google Drive successfully file are update.');
+            console.log('Log entry updated on Google Drive successfully in new file.');
         } else {
             // Crear un nuevo archivo si no existe
             await drive.files.create({
@@ -90,7 +86,7 @@ async function uploadLogEntryToDrive(logEntry) {
                 fields: 'id',
             });
 
-            console.log('Log entry uploaded to Google Drive successfully new file created.');
+            console.log('Log entry uploaded to Google Drive successfully, just update file.');
         };
     } catch (error) {
         console.error('Error uploading log entry to Google Drive:', error);

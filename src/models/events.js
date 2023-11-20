@@ -51,7 +51,11 @@ const eventSchema = mongoose.Schema({
     category:{
         type: String,
         enum: ["Árboles", "Hogar", "Industria", "Animales", "Contaminación", "Basurales", "Energía", "Fauna marina"]
-    }
+    },
+    messages: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "messages"
+    }]
 });
 
 module.exports = mongoose.model("events", eventSchema);

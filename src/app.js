@@ -8,6 +8,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const { logGenerator } = require('./logs/logs');
+const cors = require("./middleware/corsMiddleware");
 
 // Database
 const db = require("./config");
@@ -17,6 +18,7 @@ const indexRouter = require("./routes/indexRouter");
 const usersRouter = require("./routes/usersRouter");
 const eventsRouter = require("./routes/eventsRouter");
 const emailRouter = require("./routes/emailRouter");
+const messagesRouter = require("./routes/messagesRouter");
 
 const app = express(); 
 app.set("views", path.join(__dirname, "views"));
@@ -29,7 +31,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Cors
-const cors = require("./middleware/corsMiddleware");
 app.use(cors);
 
 // Logs
@@ -41,6 +42,8 @@ app.use("/api/", indexRouter);
 app.use("/api/users", usersRouter); 
 app.use("/api/events", eventsRouter); 
 app.use("/api/email", emailRouter);
+app.use("/api/messages", messagesRouter);
+
 
 // Static files, just in case
 app.use('/assets', express.static(path.join(__dirname, 'assets')));

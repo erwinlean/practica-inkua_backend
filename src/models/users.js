@@ -36,6 +36,10 @@ const users = mongoose.Schema({
     events: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'events'
+    }],
+    messages:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "messages"
     }]
 });
 
