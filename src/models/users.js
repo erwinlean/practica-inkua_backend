@@ -34,12 +34,20 @@ const users = mongoose.Schema({
         default: defaultImageURI,
     },
     events: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'events'
+        eventId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'events'
+        },
+        title: String,
+        eventDate: Date,
     }],
     messages:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "messages"
+        messageId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "messages"},
+        message:{
+            type: String
+        },
     }]
 });
 

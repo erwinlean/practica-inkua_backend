@@ -17,8 +17,8 @@ const geoLocalization = async (location) => {
             longitude = geocodingData.results[0].geometry.location.lng;
         };
 
-        let mapLink = `https://www.google.com/maps?q=${latitude},${longitude}`
-
+        const mapLink = `https://www.google.com/maps/embed/v1/place?key=${GOOGLE_API_KEY}&q=${latitude},${longitude}&language=es`
+        
         return mapLink;
     } catch (error){
         console.log(error)

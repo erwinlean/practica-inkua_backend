@@ -64,7 +64,7 @@ async function uploadLogEntryToDrive(logEntry) {
                 alt: 'media',
             });
 
-            const newContent = currentContent.data + JSON.stringify(logEntry) + '\n';
+            const newContent = currentContent.data + JSON.stringify(logEntry) + "," +  '\n';
 
             // Actualizar el contenido del archivo en Google Drive
             await drive.files.update({

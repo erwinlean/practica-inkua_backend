@@ -29,7 +29,7 @@ module.exports = {
 
     createUsers: async function (req, res, next) {
         try {
-            const { name, email, password } = req.body;
+            const { name, email, password, userImg } = req.body;
 
             if (!name || !email || !password) {
                 return res.status(400).json({ message: 'Faltan propiedades requeridas del usuario.' });
@@ -51,12 +51,23 @@ module.exports = {
                 return res.status(400).json({message: "El email proporcionado es incorrecto."});
             };
 
-            const newUser = new users({
-                name,
-                email,
-                password: hashedPassword,
-            });
-
+            let newUser;
+            
+            if(userImg){
+                newUser = new users({
+                    name,
+                    email,
+                    password: hashedPassword,
+                    userImg: userImg
+                });
+            }else{
+                newUser = new users({
+                    name,
+                    email,
+                    password: hashedPassword,
+                });
+            };
+                                                              
             await newUser.save();
 
             const token = jwt.sign(
@@ -70,7 +81,7 @@ module.exports = {
                 }
             );
 
-            return res.json({ message: 'Usuario creado exitosamente.', token });
+            return res.json({ message: 'Usuario creado exitosamente.', token, _id: newUser._id});
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Error interno del servidor.' });
@@ -104,7 +115,7 @@ module.exports = {
                 }
             );
 
-            return res.json({ message: 'Inicio de sesión exitoso.', token });
+            return res.json({ message: 'Usuario creado exitosamente.', token, _id: user._id});
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Error interno del servidor.' });

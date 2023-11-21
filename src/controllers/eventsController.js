@@ -2,14 +2,16 @@
 
 const Event = require('../models/events');
 const User = require("../models/users");
-const Messages = require("../models/messages");
 const { geoLocalization } = require("../utils/geoLocalization");
 
 module.exports = {
 
     getEvents: async function (req, res, next) {
         try {
-            const allEvents = await Event.find().populate('createdBy').populate('usersJoined').populate('messages');
+
+            // Not using populate, because the messages and user info necesary are pushed directly in the controllers.
+            
+            const allEvents = await Event.find();
 
             if (!allEvents || allEvents.length === 0) {
                 return res.status(404).json({ message: 'Eventos no encontrados.' });
@@ -25,7 +27,7 @@ module.exports = {
         try {
             const event = req.params.eventId;
 
-            const getEvent = await Event.findById(event).populate('createdBy').populate('usersJoined');
+            const getEvent = await Event.findById(event);
 
 
             if (!getEvent || getEvent.length === 0) {
@@ -83,7 +85,12 @@ module.exports = {
 
             await newEvent.save();
 
-            eventOwner.events.push(newEvent._id);
+            eventOwner.events.push({
+                _id: newEvent._id,
+                title: newEvent.title,
+                eventDate: newEvent.eventDate
+            });
+
             await eventOwner.save();
 
             return res.status(201).json({
@@ -115,10 +122,21 @@ module.exports = {
                 };
             };
 
-            event.usersJoined.push(userId);
+            event.usersJoined.push({
+                userId: user._id,
+                userName: user.name,
+                message: user.email,
+                userImage: user.userImg
+            });
+
             await event.save();
 
-            user.events.push(eventId);
+            user.events.push({
+                eventName: event.title,
+                eventId: eventId,
+                eventDate: event.eventDate
+            });
+
             await user.save();
 
             return res.status(200).json({ message: `El usuario ${userId} se unió al evento.` });

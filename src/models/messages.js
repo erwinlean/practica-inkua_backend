@@ -12,11 +12,12 @@ const messagesSchema = new mongoose.Schema({
         ref: "users",
         required: true,
     },
-    event: {
+    event: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "events",
         required: true,
-    },
+        
+    }],
     message: {
         type: String,
         required: true,

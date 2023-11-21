@@ -32,8 +32,13 @@ const eventSchema = mongoose.Schema({
         ref: 'users'
     },
     usersJoined: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'users'
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'users'
+        },
+        userName: {type: String},
+        message: {type: String},
+        userImage: {type: String},
     }],
     eventDate: {
         type: Date,
@@ -41,7 +46,7 @@ const eventSchema = mongoose.Schema({
     },
     map: {
         type: String,
-        defaut: null
+        default: null,
     },
     description:{
         type: String,
@@ -53,8 +58,13 @@ const eventSchema = mongoose.Schema({
         enum: ["Árboles", "Hogar", "Industria", "Animales", "Contaminación", "Basurales", "Energía", "Fauna marina"]
     },
     messages: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "messages"
+        messageId:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "messages"
+        },
+        message:{
+            type: String
+        }
     }]
 });
 

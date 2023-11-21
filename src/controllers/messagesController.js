@@ -7,7 +7,7 @@ const Events = require("../models/events");
 module.exports = {
     getMessages : async (req, res) => {
         try {
-              const messages = await Message.find().populate('user').populate('event');
+              const messages = await Message.find();
 
               return res.json(messages);
         } catch (error) {
@@ -24,6 +24,13 @@ module.exports = {
                 return res.status(400).json({ error: "Faltan campos obligatorios" });
             };
 
+            const existingUser = await Users.findById(user);
+            const existingEvent = await Events.findById(event);
+
+            if (!existingUser || !existingEvent) {
+                return res.status(404).json({ error: "Usuario o evento no encontrado" });
+            };
+
             const newMessage = await Message.create({
                 user,
                 event,
@@ -31,8 +38,8 @@ module.exports = {
                 isRead: false,
             });
 
-            await Users.findByIdAndUpdate(user, { $push: { messages: newMessage._id } });
-            await Events.findByIdAndUpdate(event, { $push: { messages: newMessage._id } });
+            await Users.findByIdAndUpdate(user, { $push: { messages: { messageId: newMessage._id,message: message } } });
+            await Events.findByIdAndUpdate(event, { $push: { messages: { messageId: newMessage._id,message: message } } });
 
             return res.status(201).json(newMessage);
         } catch (error) {
