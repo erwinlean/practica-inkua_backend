@@ -75,7 +75,12 @@ module.exports = {
             const newEvent = new Event({
                 title,
                 location,
-                createdBy,
+                createdBy: {
+                    eventOwnedId : eventOwner._id,
+                    eventOwnerName: eventOwner.name,
+                    eventOwnerEmail: eventOwner.email,
+                    eventOwnerImg: eventOwner.userImg
+                },
                 eventDate,
                 map,
                 eventImg,

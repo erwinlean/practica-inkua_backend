@@ -27,18 +27,23 @@ const eventSchema = mongoose.Schema({
         type: String,
         default: defaultImageURI,
     },
-    createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'users'
-    },
+    createdBy: [{
+        eventOwnedId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'users'
+        },
+        eventOwnerName:  { type: String } ,
+        eventOwnerEmail: { type: String } ,
+        eventOwnerImg:   { type: String }
+    }],
     usersJoined: [{
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'users'
         },
-        userName: {type: String},
-        message: {type: String},
-        userImage: {type: String},
+        userName:  { type: String } ,
+        message:   { type: String } ,
+        userImage: { type: String } 
     }],
     eventDate: {
         type: Date,
