@@ -136,7 +136,7 @@ module.exports = {
             };
 
             if (password !== undefined) {
-                user.password = password;
+                user.password = validationPassword(password);
             };
 
             if (email !== undefined) {
