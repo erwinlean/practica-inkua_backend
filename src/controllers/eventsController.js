@@ -152,12 +152,15 @@ module.exports = {
     },
 
     userQuitEvent: async function (req, res, next) {
-        try {
+        try { 
+            // Filter and includes doesnt work after change the schema, to review
             const { eventId, userId } = req.body;
             
             const event = await Event.findById(eventId);
             const user = await User.findById(userId);
     
+            console.log(user.events)
+            console.log(event.usersJoined)
             if (!event) {
                 return res.status(404).json({ message: 'Evento no encontrado.' });
             };
@@ -166,7 +169,7 @@ module.exports = {
                 return res.status(404).json({ message: 'Usuario no encontrado.' });
             };
     
-            if (!user.events.includes(eventId) || !event.usersJoined.includes(userId)) {
+            if (!user.events.userId.includes(eventId) || !event.usersJoined.includes(userId)) {
                 return res.status(400).json({ message: "El usuario no está suscrito a este evento." });
             };
     
@@ -185,13 +188,13 @@ module.exports = {
 
     updateEvent: async function (req, res, next){
         try{
-            const { userId, eventId, title, location, eventImg, createdBy, eventDate, description, category } = req.body;
-
-            if(userId !== createdBy){
-                return res.status(401).json({ message: "Solo el creador del evento puede modificarlo."})
-            };
+            const { userId, eventId, title, location, eventImg, eventDate, description, category } = req.body;
 
             const event = Event.findById(eventId);
+
+            if(userId !== event){ // buscar el id del creador de evento aa modificar
+                return res.status(401).json({ message: "Solo el creador del evento puede modificarlo."})
+            };
 
             if(!event){
                 return res.status(404).json({ message: "Evento no encontrado, por favor verifica la existencia del mismo."})
@@ -212,7 +215,7 @@ module.exports = {
                 event.eventImg = eventImgFileName;
             };
 
-            const toUpdate = { title, location, createdBy, eventDate, description, category };
+            const toUpdate = { title, location, eventDate, description, category };
 
             for (const field in toUpdate) {
                 if (toUpdate[field] !== undefined) {
@@ -224,7 +227,7 @@ module.exports = {
 
             return res.status(200).json({ message: `El evento ${title}, ${eventId} fue actualizado.`})
         } catch(error){
-            return res.status(500).json({ message: 'Error interno del servidor.' });
+            return res.status(500).json({ message: 'Error interno del servidor.' + error });
         };
     },
 
@@ -232,14 +235,19 @@ module.exports = {
         try {
             const { userDeleting } = req.body;
             const { eventId } = req.params;
+
             const event =  await Event.findOne({eventId});
-            if(userDeleting !== event.createdBy.valueOf()){
+
+            // Modify this search created by to work
+            if(userDeleting !== event.createdBy.eventOwnedId.valueOf()){
                 return res.status(403).json({ message: 'No autorizado, solo el creado del evento puede eliminarlo.' });
             };
+
             const deletedEvent = await Event.findByIdAndDelete(eventId);
             if (!deletedEvent) {
                 return res.status(404).json({ message: 'Evento no encontrado.' });
             };
+
             return res.status(200).json({ message: `El evento ${deletedEvent.title} fue eliminado.` });
         } catch (error) {
             console.error(error);

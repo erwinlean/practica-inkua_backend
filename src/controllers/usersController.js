@@ -171,9 +171,9 @@ module.exports = {
 
     deleteUser: async function (req, res, next) {
         try {
-            const { userLogged } = req.body;
+            const { userId } = req.body;
             const { emailToDelete } = req.params;
-            console.log(userLogged, emailToDelete);
+            console.log(userId, emailToDelete);
     
             const user = await users.findOne({ email: emailToDelete });
     
@@ -181,7 +181,7 @@ module.exports = {
                 return res.status(404).json({ message: `Usuario ${emailToDelete} no encontrado.` });
             };
     
-            if (user._id.toString() !== userLogged) {
+            if (user._id.toString() !== userId) {
                 return res.status(401).json({ message: 'Solo puedes eliminar tu propio perfil.' });
             };
     

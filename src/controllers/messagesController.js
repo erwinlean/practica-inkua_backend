@@ -50,19 +50,20 @@ module.exports = {
 
     deleteMessage : async (req, res) => {
         try {
-            const messageId = req.params.messageId;
-
+            const { messageId } = req.body;
+            console.log(messageId)
 
             const existingMessage = await Message.findById(messageId);
             if (!existingMessage) {
               return res.status(404).json({ error: "Mensaje no encontrado" });
             };
 
-            if (existingMessage.user.toString() !== req.user.id) {
-              return res.status(403).json({ error: "No tienes permiso para eliminar este mensaje" });
-            };
+            //if (existingMessage.user.toString() !== req.user.id) {
+            //  return res.status(403).json({ error: "No tienes permiso para eliminar este mensaje" });
+            //};
 
             await Message.findByIdAndDelete(messageId);
+            
             return res.json({ message: "Mensaje eliminado exitosamente" });
         } catch (error) {
             console.error(error);

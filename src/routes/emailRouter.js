@@ -12,7 +12,7 @@ router.post("/password", apiLimiter, passwordReset);
 // Redirect endpoint to frontend with token and the user email
 router.get("/password/:token", redirect);
 // Change the password endpoint
-router.post("/confirm", jsonWebTokenVerify , apiLimiter, confirmPasswordReset);
+router.post("/password/confirm", jsonWebTokenVerify , apiLimiter, confirmPasswordReset);
 router.all("/", badMethod);
 
 module.exports = router;

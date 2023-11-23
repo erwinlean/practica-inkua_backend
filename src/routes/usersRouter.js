@@ -22,7 +22,7 @@ router.put("/update", jsonWebTokenVerify, apiLimiter, userUpdate)
 
 // Delete user by email and token required.
 router.delete('/delete/:emailToDelete', jsonWebTokenVerify, apiLimiter, deleteUser);
-router.all('/delete', badMethod)
+//router.all('/delete', badMethod)
 
 // Clear users, just for dev mode.
 router.delete('/deleteall', apiLimiter, deleteAllUsers);
