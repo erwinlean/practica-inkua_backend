@@ -1,15 +1,16 @@
 /**
- * @param {string} userEmail
- * @param {string} resetLink
- * @param {string} userName
- * @returns {void}
+ * @param { string } userEmail
+ * @param { string } resetLink
+ * @param { string } userName
+ * @param { Object } eventData
+ * @returns { void }
  */
 
 "use strict";
 
 const nodemailer = require("nodemailer");
 // Style for email function
-const htmlMail = require("./emailStyles");
+const {htmlResetEmail, } = require("./emailStyles");
 require("dotenv").config();
 
 // Variables and transporter
@@ -24,7 +25,7 @@ function sendResetEmail(userEmail, resetLink, userName) {
         from: "eco_encuentro@inkua.com",
         to: userEmail,
         subject: "Password Reset Request",
-        html: htmlMail(resetLink, userName)
+        html: htmlResetEmail(resetLink, userName)
     };
 
     // Send the email
@@ -41,4 +42,31 @@ function sendResetEmail(userEmail, resetLink, userName) {
     });
 };
 
-module.exports = { sendResetEmail };
+function sendEVentEmail(userEmail, eventData, userName) {
+
+    // Create email message
+    const mailOptions = {
+        from: "eco_encuentro@inkua.com",
+        to: userEmail,
+        subject: `Union a vento eco-encuentro ${eventData.eventDate}`,
+        html: htmlMail(eventData, userName)
+    };
+
+    // Send the email
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error("Error sending email:", error);
+
+            return;
+        } else {
+            console.log("Password reset email sent:", info.response);
+
+            return;
+        };
+    });
+};
+
+module.exports = { 
+    sendResetEmail,
+    sendEVentEmail
+ };
