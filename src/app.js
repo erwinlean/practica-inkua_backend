@@ -8,7 +8,8 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const { logGenerator } = require('./logs/logs');
-const cors = require("./middleware/corsMiddleware");
+const cors = require("cors");
+const { corsConfig, corsOptions } = require("./middleware/corsMiddleware");
 
 // Database
 const db = require("./config");
@@ -31,7 +32,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Cors
-app.use(cors);
+app.use(corsConfig);
+app.options('*', cors(corsOptions));
 
 // Logs
 app.use(logGenerator);
