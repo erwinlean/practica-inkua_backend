@@ -1,15 +1,11 @@
 "use strict";
 
-const cors = require("cors");
-
-const corsOptions = {
-    origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    headers: "Content-Type, Authorization"
-};
-
 function corsConfig(req, res, next) {
-    cors(corsOptions)(req, res, next);
-};
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
-module.exports = { corsConfig, corsOptions };
+    next();
+}
+
+module.exports = {corsConfig};

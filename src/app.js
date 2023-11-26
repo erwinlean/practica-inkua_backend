@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const { logGenerator } = require('./logs/logs');
 const cors = require("cors");
-const { corsConfig, corsOptions } = require("./middleware/corsMiddleware");
+const { corsConfig } = require("./middleware/corsMiddleware");
 
 // Database
 const db = require("./config");
