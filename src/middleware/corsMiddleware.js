@@ -6,6 +6,6 @@ function corsConfig(req, res, next) {
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     next();
-}
+};
 
 module.exports = {corsConfig};

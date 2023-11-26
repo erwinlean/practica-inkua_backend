@@ -33,7 +33,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Cors
 app.use(corsConfig);
-app.options('*', cors(corsOptions));
 
 // Logs
 app.use(logGenerator);
