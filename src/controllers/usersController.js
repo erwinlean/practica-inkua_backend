@@ -86,7 +86,7 @@ module.exports = {
                 }
             );
 
-            return res.json({ message: 'Usuario creado exitosamente.', token, _id: newUser._id});
+            return res.json({ message: 'Usuario creado exitosamente.', token, _id: newUser._id, name: newUser.name, userImg: newUser.userImg });
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Error interno del servidor.' });
@@ -124,7 +124,7 @@ module.exports = {
                 }
             );
 
-            return res.json({ message: 'Usuario creado exitosamente.', token, _id: user._id});
+            return res.json({ message: 'Usuario creado exitosamente.', token, _id: user._id, name: user.name, userImg: user.userImg});
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Error interno del servidor.' });
