@@ -65,7 +65,7 @@ module.exports = {
                 location,
                 createdBy,
                 eventDate,                
-                eventImg,
+                //eventImg,
                 description,
                 category
             };
@@ -90,7 +90,7 @@ module.exports = {
                 },
                 eventDate,
                 map,
-                eventImg,
+                //eventImg,
                 description,
                 category
             });
