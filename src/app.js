@@ -1,6 +1,6 @@
 "use strict";
 
-// Server default port is 3000 //
+// Server default port is 8000 //
 
 const createError = require("http-errors");
 const express = require("express");
@@ -32,7 +32,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Cors
-app.use(corsConfig);
+app.use(cors);
 
 // Logs
 app.use(logGenerator);
