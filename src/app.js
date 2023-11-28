@@ -32,7 +32,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Cors
-app.use(cors);
+app.use(cors());
 
 // Logs
 app.use(logGenerator);
