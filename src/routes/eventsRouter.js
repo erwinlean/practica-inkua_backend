@@ -15,13 +15,13 @@ router.get("/:eventId", getEvent);
 router.all('/', badMethod)
 
 // Create the event
-router.post("/create", jsonWebTokenVerify, apiLimiter, createEvents);
+router.post("/create", jsonWebTokenVerify, createEvents);
 // Upload user to the event
-router.put("/usersevent", jsonWebTokenVerify, apiLimiter, usersJoiningEvent);
+router.put("/usersevent", jsonWebTokenVerify, usersJoiningEvent);
 // User quit event
-router.put("/userquit", jsonWebTokenVerify, apiLimiter, userQuitEvent);
+router.put("/userquit", jsonWebTokenVerify, userQuitEvent);
 // Event update/modify
-router.put("/update", jsonWebTokenVerify, apiLimiter, updateEvent)
+router.put("/update", jsonWebTokenVerify, updateEvent)
 
 // Delete specific event based on email (must be the same as the creator)
 router.delete("/delete/:eventId", jsonWebTokenVerify, apiLimiter, deleteEvent);
