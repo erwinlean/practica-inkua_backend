@@ -16,10 +16,10 @@ router.get('/', getMessages);
 router.all('/', badMethod)
 
 // Create the Messages
-router.post("/create", jsonWebTokenVerify, createMessages);
+router.post("/create", jsonWebTokenVerify, apiLimiter, createMessages);
 
 // Delete specific Messages based on email (must be the same as the creator)
-router.delete("/delete", jsonWebTokenVerify, deleteMessage);
-router.delete("/deleteall", deleteAllMessages);
+router.delete("/delete", jsonWebTokenVerify, apiLimiter, deleteMessage);
+// router.delete("/deleteall", deleteAllMessages);
 
 module.exports = router;

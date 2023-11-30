@@ -66,7 +66,33 @@ function sendEVentEmail(userEmail, eventData, userName) {
     });
 };
 
+
+// Contacct Email
+function contactEmail(name, email, affair, message) {
+
+    const mailOptions = {
+        from: email,
+        to: "erwin.mdq@gmail.com",
+        subject: affair,
+        html: htmlMail(message, name)
+    };
+    
+    // Send the email
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.error("Error sending email:", error);
+        
+            return;
+        } else {
+            console.log("Password reset email sent:", info.response);
+        
+            return;
+        };
+    });
+};
+
 module.exports = { 
     sendResetEmail,
-    sendEVentEmail
+    sendEVentEmail,
+    contactEmail
  };
