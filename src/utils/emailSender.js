@@ -10,7 +10,7 @@
 
 const nodemailer = require("nodemailer");
 // Style for email function
-const {htmlResetEmail, } = require("./emailStyles");
+const {htmlResetEmail, htmlMailContact, htmlEventEmail} = require("./emailStyles");
 require("dotenv").config();
 
 // Variables and transporter
@@ -49,7 +49,7 @@ function sendEVentEmail(userEmail, eventData, userName) {
         from: "eco_encuentro@inkua.com",
         to: userEmail,
         subject: `Union a vento eco-encuentro ${eventData.eventDate}`,
-        html: htmlMail(eventData, userName)
+        html: htmlEventEmail(eventData, userName)
     };
 
     // Send the email
@@ -74,7 +74,7 @@ function contactEmail(name, email, affair, message) {
         from: email,
         to: "erwin.mdq@gmail.com",
         subject: affair,
-        html: htmlMail(message, name)
+        html: htmlMailContact(message, name, email)
     };
     
     // Send the email

@@ -30,11 +30,11 @@ function htmlResetEmail(resetLink, userName) {
     `;
 };
 
-function htmlEeventEmail(eventData, userName) {
+function htmlEventEmail(eventData, userName) {
     
     const { title, eventDate, map } = eventData;
     const logo = "https://i.postimg.cc/TptpbPBF/Isologotipo.png";
-    const date = new SimpleDateFormat(eventDate);
+    const date = eventDate;
 
     // Template literals for cleaner HTML structure
     return `
@@ -52,7 +52,24 @@ function htmlEeventEmail(eventData, userName) {
     `;
 };
 
+function htmlMailContact(name, message, email) {
+    const logo = "https://i.postimg.cc/TptpbPBF/Isologotipo.png";
+
+    return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center; color: black;">
+        <img src="${logo}" style="width: 100px; height: auto; margin-bottom: 20px;" alt="Eco-encuentro logo" title="Eco-encuentro Logo"/>
+        <h1 style="color: #61AE4E;">Email enviado por ${name}, email ${email}</h1>
+        <p style="font-size: 18px; margin-bottom: 20px;">Mensaje: </p>
+        <br>
+        <br>
+        <br>
+        <p style="font-size: 18px; margin-bottom: 20px;">${message}</p>
+    </div>
+`;
+};
+
 module.exports = {
     htmlResetEmail,
-    htmlEeventEmail
+    htmlEventEmail,
+    htmlMailContact
 };
