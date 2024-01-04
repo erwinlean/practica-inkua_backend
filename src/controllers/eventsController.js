@@ -258,18 +258,18 @@ module.exports = {
 
     deleteEvent: async function (req, res, next) {
         try {
-            const { userDeleting } = req.body;
+            const { userId } = req.body;
             const { eventId } = req.params;
 
-            if(checkInputs({ userDeleting })){
+            if(checkInputs({ userId })){
                 return res.status(403).json({ message: "Error verifique la informacion, se detecto un posible peligro"})
             };
                         
 
-            const event =  await Event.findOne({eventId});
+            const event =  await Event.findById(eventId);
 
             // Modify this search created by to work
-            if(userDeleting !== event.createdBy.eventOwnedId.valueOf()){
+            if(userId !== event.createdBy[0]._id.valueOf()){
                 return res.status(403).json({ message: "No autorizado, solo el creado del evento puede eliminarlo." });
             };
 
