@@ -1,6 +1,7 @@
 "use strict";
 
-const users = require('../models/users');
+const users = require('../models/users'); // to modify to Users.
+const Events = require("../models/events");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { validationPassword, validationEmail } = require("../utils/validation")
@@ -207,6 +208,11 @@ module.exports = {
             if (!deletedUser) {
                 return res.status(404).json({ message: `Usuario ${emailToDelete} no encontrado.` });
             };
+
+            await Events.updateMany(
+                { 'usersJoined.userId': userId },
+                { $pull: { usersJoined: { userId } } }
+            );
     
             return res.json({ message: `Usuario ${emailToDelete} eliminado exitosamente.` });
         } catch (error) {

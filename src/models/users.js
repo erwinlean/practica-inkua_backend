@@ -48,7 +48,29 @@ const users = mongoose.Schema({
         message:{
             type: String
         },
+    }],
+    // logical deletion to add.
+    /*
+    deleted:[{
+        isDeleted: {
+            type: boolean,
+            default: false
+        },
+        date:{
+            type: Date,
+            default: date
+        }
     }]
+    */
 });
+
+/*
+users.pre('save', function (next) {
+    if (this.deleted.isDeleted && !this.deleted.date) {
+        this.deleted.date = new Date();
+    };
+    next();
+});
+*/
 
 module.exports = mongoose.model('users', users);

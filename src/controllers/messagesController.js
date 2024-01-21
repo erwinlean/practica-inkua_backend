@@ -53,6 +53,7 @@ module.exports = {
         };
     },
 
+    // To modify when the message is deleted, should be deleted of the user and event DB to.
     deleteMessage : async (req, res) => {
         try {
             const { messageId } = req.body;

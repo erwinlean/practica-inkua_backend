@@ -278,6 +278,12 @@ module.exports = {
                 return res.status(404).json({ message: "Evento no encontrado." });
             };
 
+            // Delete the event for all the users have joined the event
+            await User.updateMany(
+                { 'events.eventId': eventId },
+                { $pull: { events: { eventId } } }
+            );
+
             return res.status(200).json({ message: `El evento ${deletedEvent.title} fue eliminado.` });
         } catch (error) {
             console.error(error);
